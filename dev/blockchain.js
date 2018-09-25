@@ -4,7 +4,7 @@ function Blockchain() {
   this.chain = [];
   this.pendingTransactions = [];
 
-  this.createNewBlock(100, '0', 'ThisIsTheGenesisBlock')
+  this.createNewBlock(100, 'ThisWouldBeLastBlockHash', 'ThisIsTheGenesisBlock')
 };
 
 
@@ -13,9 +13,9 @@ Blockchain.prototype.createNewBlock = function(nonce, previousBlockHash, hash) {
     index: this.chain.length + 1,
     timestamp: Date.now(),
     transactions: this.pendingTransactions,
-    nonce,
-    hash,
-    previousBlockHash
+    nonce: nonce,
+    hash: hash,
+    previousBlockHash: previousBlockHash
   };
 
   this.pendingTransactions = [];
@@ -52,7 +52,7 @@ Blockchain.prototype.proofOfWork = function(previousBlockHash, currentBlockData)
   let nonce = 0;
   let hash = this.hashBlock(previousBlockHash, currentBlockData, nonce);
 
-  while (hash.substring(0, 4) !== '0000') {
+  while (hash.substring(0, 5) !== '00000') {
     nonce++;
     hash = this.hashBlock(previousBlockHash, currentBlockData, nonce);
   };

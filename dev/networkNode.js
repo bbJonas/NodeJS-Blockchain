@@ -24,6 +24,29 @@ app.post('/transaction', (req, res) => {
 });
 
 
+app.post('/transaction/broadcast', (req, res) => {
+  const newTransaction = playbucks.createNewTransaction(req.body.amount, req.body.sender, req.body.recipient);
+  playbucks.addTransactionToPendingTransactions(newTransaction);
+
+  const requestPromises = [];
+  playbucks.networkNodes.forEach(networkNodeUrl => {
+    const requestOptions = {
+      uri: networkNodeUrl + '/transaction',
+      method: 'POST',
+      body: newTransaction,
+      json: true
+    };
+
+    requestPromises.push(rp(requestOptions));
+  });
+
+  Promise.all(requestPromises)
+  .then(data => {
+    res.json({ note: 'Transaction created and broadcast successfully.' })
+  });
+});
+
+
 app.get('/mine', (req, res) => {
   const lastBlock = playbucks.getLastBlock();
   const previousBlockHash = lastBlock.hash;

@@ -1,5 +1,5 @@
 const Blockchain = require('./blockchain');
-const playbuck = new Blockchain();
+const playbucks = new Blockchain();
 
 const previousBlockHash = '82AfDLEWFBN83rkbYSLLFiwafbASD';
 const currentBlockData = [
@@ -20,4 +20,4 @@ const currentBlockData = [
   }
 ];
 
-console.log(playbuck.proofOfWork(previousBlockHash, currentBlockData));
+console.log(playbucks.proofOfWork(previousBlockHash, currentBlockData));

@@ -1,7 +1,7 @@
 const sha256 = require('js-sha256');
 
 const Blockchain = require('./blockchain');
-const playbuck = new Blockchain();
+const playbucks = new Blockchain();
 
 var FakeTx = function() {
   this.amount = Math.round(Math.random()*100),
@@ -15,15 +15,15 @@ for (i = 0; i < 100; i++) {
   var tx1 = new FakeTx();
   var tx2 = new FakeTx();
 
-  playbuck.pendingTransactions.push(tx1, tx2);
+  playbucks.pendingTransactions.push(tx1, tx2);
 
-  var currentBlockData = playbuck.pendingTransactions
-  var lastBlock = playbuck.getLastBlock();
+  var currentBlockData = playbucks.pendingTransactions
+  var lastBlock = playbucks.getLastBlock();
 
-  var powNonce = playbuck.proofOfWork(lastBlock.hash, currentBlockData);
-  var currentBlockHash = playbuck.hashBlock(lastBlock.hash, currentBlockData, powNonce);
+  var powNonce = playbucks.proofOfWork(lastBlock.hash, currentBlockData);
+  var currentBlockHash = playbucks.hashBlock(lastBlock.hash, currentBlockData, powNonce);
 
-  playbuck.createNewBlock(powNonce, lastBlock.hash, currentBlockHash);
+  playbucks.createNewBlock(powNonce, lastBlock.hash, currentBlockHash);
 
   console.log(lastBlock);
 };

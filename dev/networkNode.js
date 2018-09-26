@@ -147,7 +147,7 @@ app.post('/register-nodes-bulk', (req, res) => {
   allNetworkNodes.forEach(networkNodeUrl => {
     const nodeNotAlreadyPresent = playbucks.networkNodes.indexOf(networkNodeUrl) == -1;
     const notCurrentNode = playbucks.currentNodeUrl !== networkNodeUrl;
-    if (nodeNotAlreadyPresent, notCurrentNode) playbucks.networkNodes.push(networkNodeUrl);
+    if (nodeNotAlreadyPresent && notCurrentNode) playbucks.networkNodes.push(networkNodeUrl);
   });
 
   res.json({ note: 'Bulk registration successful.' });

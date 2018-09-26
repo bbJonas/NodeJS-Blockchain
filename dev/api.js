@@ -35,7 +35,7 @@ app.get('/mine', (req, res) => {
 
   playbucks.createNewTransaction(50, '00', nodeAddress);
 
-  const newBlock = playbucks.createNewBlock(nonce, previousBlockHash, currentBlockHash);
+  const newBlock = playbucks.createNewBlock(nonce, previousBlockHash, blockHash);
   res.json({
     note: "New block mined successfully",
     block: newBlock

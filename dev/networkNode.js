@@ -50,9 +50,9 @@ app.post('/register-and-broadcast-node', (req, res) => {
   if (playbucks.networkNodes.indexOf(newNodeUrl) == -1) playbucks.networkNodes.push(newNodeUrl);
 
   const regNodesPromises = [];
-  bitcoin.networkNodes.forEach(networkNodeUrl => {
+  playbucks.networkNodes.forEach(networkNodeUrl => {
     const requestOptions = {
-      uri: networkNodeUrl + '/registerNode',
+      uri: networkNodeUrl + '/register-node',
       method: 'POST',
       body: {newNodeUrl: newNodeUrl},
       json: true
@@ -61,7 +61,8 @@ app.post('/register-and-broadcast-node', (req, res) => {
     regNodesPromises.push(rp(requestOptions));
   });
 
-  Promise.all(regNodesPromises).then(data => {
+  Promise.all(regNodesPromises)
+  .then(data => {
     const bulkRegisterOptions = {
       uri: newNodeUrl + '/register-nodes-bulk',
       method: 'POST',
@@ -89,7 +90,14 @@ app.post('/register-node', (req, res) => {
 
 // register multiple nodes at once
 app.post('/register-nodes-bulk', (req, res) => {
+  const allNetworkNodes = req.body.allNetworkNodes;
+  allNetworkNodes.forEach(networkNodeUrl => {
+    const nodeNotAlreadyPresent = playbucks.networkNodes.indexOf(networkNodeUrl) == -1;
+    const notCurrentNode = playbucks.currentNodeUrl !== networkNodeUrl;
+    if (nodeNotAlreadyPresent, notCurrentNode) playbucks.networkNodes.push(networkNodeUrl);
+  });
 
+  res.json({ note: 'Bulk registration successful.' });
 });
 
 

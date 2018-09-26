@@ -76,15 +76,23 @@ app.post('/register-and-broadcast-node', (req, res) => {
   });
 });
 
+
 // register a node with the network
 app.post('/register-node', (req, res) => {
-
+  const newNodeUrl = req.body.newNodeUrl;
+  const nodeNotAlreadyPresent = playbucks.networkNodes.indexOf(newNodeUrl) == -1;
+  const notCurrentNode = playbucks.currentNodeUrl !== newNodeUrl;
+  if (nodeNotAlreadyPresent && notCurrentNode) playbucks.networkNodes.push(newNodeUrl);
+  res.json({ note: 'New node registered successfully.' });
 });
+
 
 // register multiple nodes at once
 app.post('/register-nodes-bulk', (req, res) => {
 
 });
+
+
 
 
 app.listen(port, () => {

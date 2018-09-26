@@ -51,7 +51,7 @@ app.post('/register-and-broadcast-node', (req, res) => {
 
   const regNodesPromises = [];
   bitcoin.networkNodes.forEach(networkNodeUrl => {
-    const.requestOptions = {
+    const requestOptions = {
       uri: networkNodeUrl + '/registerNode',
       method: 'POST',
       body: {newNodeUrl: newNodeUrl},
@@ -62,7 +62,17 @@ app.post('/register-and-broadcast-node', (req, res) => {
   });
 
   Promise.all(regNodesPromises).then(data => {
-    // use the data....
+    const bulkRegisterOptions = {
+      uri: newNodeUrl + '/register-nodes-bulk',
+      method: 'POST',
+      body: { allNetworkNodes: [...playbucks.networkNodes, playbucks.currentNodeUrl] },
+      json: true
+    };
+
+    return rp(bulkRegisterOptions);
+  })
+  .then(data => {
+    res.json({ note: 'New node registered with network successfully.' });
   });
 });
 

@@ -48,6 +48,7 @@ app.post('/transaction/broadcast', (req, res) => {
 });
 
 
+// mine a block
 app.get('/mine', (req, res) => {
   const lastBlock = playbucks.getLastBlock();
   const previousBlockHash = lastBlock.hash;
@@ -58,15 +59,43 @@ app.get('/mine', (req, res) => {
 
   const nonce = playbucks.proofOfWork(previousBlockHash, currentBlockData);
   const blockHash = playbucks.hashBlock(previousBlockHash, currentBlockData, nonce);
-
-  playbucks.createNewTransaction(50, '00', nodeAddress);
-
   const newBlock = playbucks.createNewBlock(nonce, previousBlockHash, blockHash);
-  res.json({
-    note: "New block mined successfully",
-    block: newBlock
+
+  const requestPromises = [];
+  playbucks.networkNodes.forEach(networkNodeUrl => {
+    const requestOptions = {
+      uri: networkNodeUrl + '/recieve-new-block',
+      method: 'POST',
+      body: { newBlock: newBlock },
+      json: true
+    };
+
+    requestPromises.push(rp(requestOptions));
+  });
+
+  Promise.all(requestPromises)
+  .then(data => {
+    const requestOptions = {
+      uri: playbucks.currentNodeUrl + '/transaction/broadcast',
+      method: 'POST',
+      body: {
+        amount: 10,
+        sender: '0000000',
+        recipient: nodeAddress
+      },
+      json: true
+    };
+
+    return rp(requestOptions);
+  })
+  .then(data => {
+    res.json({
+      note: "New block mined & broadcast successfully.",
+      block: newBlock
+    });
   });
 });
+
 
 // register node and broadcast it to the network
 app.post('/register-and-broadcast-node', (req, res) => {

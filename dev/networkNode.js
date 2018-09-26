@@ -19,8 +19,9 @@ app.get('/blockchain', (req, res) => {
 
 
 app.post('/transaction', (req, res) => {
-  const blockIndex = playbucks.createNewTransaction(req.body.amount, req.body.sender, req.body.recipient);
-  res.json({note: `Transaction will be added on block ${blockIndex}.`});
+  const newTransaction = req.body;
+  const blockIndex = playbucks.addTransactionToPendingTransactions(newTransaction);
+  res.json({ note: `Transaction will be added on block ${blockIndex}` });
 });
 
 

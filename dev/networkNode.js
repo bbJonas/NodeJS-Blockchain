@@ -43,7 +43,7 @@ app.post('/transaction/broadcast', (req, res) => {
 
   Promise.all(requestPromises)
   .then(data => {
-    res.json({ note: 'Transaction created and broadcast successfully.' })
+    res.json({ note: 'Transaction created and broadcast successfully.' });
   });
 });
 
@@ -64,7 +64,7 @@ app.get('/mine', (req, res) => {
   const requestPromises = [];
   playbucks.networkNodes.forEach(networkNodeUrl => {
     const requestOptions = {
-      uri: networkNodeUrl + '/recieve-new-block',
+      uri: networkNodeUrl + '/receive-new-block',
       method: 'POST',
       body: { newBlock: newBlock },
       json: true
@@ -94,6 +94,28 @@ app.get('/mine', (req, res) => {
       block: newBlock
     });
   });
+});
+
+
+app.post('/receive-new-block', (req, res) => {
+  const newBlock = req.body.newBlock;
+  const lastBlock = playbucks.getLastBlock();
+  const correctHash = lastBlock.hash === newBlock.previousBlockHash;
+  const correctIndex = lastBlock.index + 1 === newBlock.index;
+
+  if (correctHash && correctIndex) {
+    playbucks.chain.push(newBlock);
+    playbucks.pendingTransactions = [];
+    res.json({
+      note: 'New block received and accepted.',
+      newBlock: newBlock
+    });
+  } else {
+    res.json({
+      note: 'New block rejected.',
+      newBlock: newBlock
+    });
+  }
 });
 
 

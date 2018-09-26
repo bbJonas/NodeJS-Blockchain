@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-Parser');
 const uuid = require('uuid/v1');
+const rp = require('request-promise');
+const port = process.argv[2] || 3000;
 
 const Blockchain = require('./blockchain');
 const nodeAddress = uuid().split('-').join('');
@@ -42,10 +44,39 @@ app.get('/mine', (req, res) => {
   });
 });
 
+// register node and broadcast it to the network
+app.post('/register-and-broadcast-node', (req, res) => {
+  const newNodeUrl = req.body.newNodeUrl;
+  if (playbucks.networkNodes.indexOf(newNodeUrl) == -1) playbucks.networkNodes.push(newNodeUrl);
+
+  const regNodesPromises = [];
+  bitcoin.networkNodes.forEach(networkNodeUrl => {
+    const.requestOptions = {
+      uri: networkNodeUrl + '/registerNode',
+      method: 'POST',
+      body: {newNodeUrl: newNodeUrl},
+      json: true
+    };
+
+    regNodesPromises.push(rp(requestOptions));
+  });
+
+  Promise.all(regNodesPromises).then(data => {
+    // use the data....
+  });
+});
+
+// register a node with the network
+app.post('/register-node', (req, res) => {
+
+});
+
+// register multiple nodes at once
+app.post('/register-nodes-bulk', (req, res) => {
+
+});
 
 
-
-var port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Listening on port ${port}...`);
 });

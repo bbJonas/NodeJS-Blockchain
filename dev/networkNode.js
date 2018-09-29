@@ -207,7 +207,7 @@ app.get('/consensus', (req, res) => {
     if (!newLongestChain || (newLongestChain && !playbucks.chainIsValid(newLongestChain))) {
       res.json({
         note: 'Current chain has not been replaced.',
-        chain: playbucks.chain;
+        chain: playbucks.chain
       });
     }
     else if (newLongestChain && playbucks.chainIsValid(newLongestChain)) {
@@ -215,7 +215,7 @@ app.get('/consensus', (req, res) => {
       playbucks.pendingTransactions = newPendingTransactions;
       res.json({
         note: 'This chain has been replaced.',
-        chain: playbucks.chain;
+        chain: playbucks.chain
       });
     }
     else {

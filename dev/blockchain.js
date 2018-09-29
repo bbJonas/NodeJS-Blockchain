@@ -62,7 +62,7 @@ Blockchain.prototype.proofOfWork = function(previousBlockHash, currentBlockData)
   let nonce = 0;
   let hash = this.hashBlock(previousBlockHash, currentBlockData, nonce);
 
-  while (hash.substring(0, 5) !== '00000') {
+  while (hash.substring(0, 4) !== '0000') {
     nonce++;
     hash = this.hashBlock(previousBlockHash, currentBlockData, nonce);
   };

@@ -122,7 +122,8 @@ app.post('/receive-new-block', (req, res) => {
 // register node and broadcast it to the network
 app.post('/register-and-broadcast-node', (req, res) => {
   const newNodeUrl = req.body.newNodeUrl;
-  if (playbucks.networkNodes.indexOf(newNodeUrl) == -1) playbucks.networkNodes.push(newNodeUrl);
+  const notCurrentNode = playbucks.currentNodeUrl !== newNodeUrl;
+  if ((playbucks.networkNodes.indexOf(newNodeUrl) == -1) && notCurrentNode) playbucks.networkNodes.push(newNodeUrl);
 
   const regNodesPromises = [];
   playbucks.networkNodes.forEach(networkNodeUrl => {
@@ -225,6 +226,34 @@ app.get('/consensus', (req, res) => {
     }
   });
 });
+
+
+// Auto register node at startup
+const currentNodeUrl = playbucks.currentNodeUrl;
+const requestOptions = {
+  uri: 'http://localhost:3001' + '/register-and-broadcast-node',
+  method: 'POST',
+  body: {newNodeUrl: currentNodeUrl},
+  json: true
+};
+
+rp(requestOptions)
+.then(data => {
+  console.log('NETWORK: ', data.note);
+
+  // then reach consensus
+  const requestOptions2 = {
+    uri: currentNodeUrl + '/consensus',
+    method: 'GET',
+    json: true
+  };
+
+  rp(requestOptions2)
+  .then(data => {
+    console.log('BLOCKCHAIN: ', data.note);
+  });
+});
+
 
 
 app.listen(port, () => {

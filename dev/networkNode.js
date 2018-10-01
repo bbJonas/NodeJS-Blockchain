@@ -228,6 +228,36 @@ app.get('/consensus', (req, res) => {
 });
 
 
+app.get('/block/:blockHash', (req, res) => {
+  const blockHash = req.params.blockHash;
+  const correctBlock = playbucks.getBlock(blockHash);
+  res.json({
+    block: correctBlock
+  });
+});
+
+
+app.get('/transaction/:transactionId', (req, res) => {
+  const transactionId = req.params.transactionId;
+  const transactionData = playbucks.getTransaction(transactionId);
+  res.json({
+    transaction: transactionData.transaction,
+    block: transactionData.block
+  });
+});
+
+
+app.get('/address/:address', (req, res) => {
+  const address = req.params.address;
+  const addressData = playbucks.getAddressData(address);
+  res.json({
+    note: `Showing balance info for address: ${address}`,
+    addressData: addressData
+  });
+});
+
+
+
 // Auto register node at startup
 const currentNodeUrl = playbucks.currentNodeUrl;
 const requestOptions = {

@@ -44,6 +44,9 @@ app.post('/transaction/broadcast', (req, res) => {
   Promise.all(requestPromises)
   .then(data => {
     res.json({ note: 'Transaction created and broadcast successfully.' });
+  })
+  .catch(err => {
+    console.log(err);
   });
 });
 
@@ -85,7 +88,9 @@ app.get('/mine', (req, res) => {
       },
       json: true
     };
-
+    if ((err) => {
+      console.log(err);
+    });
     return rp(requestOptions);
   })
   .then(data => {
@@ -93,6 +98,9 @@ app.get('/mine', (req, res) => {
       note: "New block mined & broadcast successfully.",
       block: newBlock
     });
+  })
+  .catch(err => {
+    console.log(err);
   });
 });
 
@@ -150,6 +158,9 @@ app.post('/register-and-broadcast-node', (req, res) => {
   })
   .then(data => {
     res.json({ note: 'New node registered with network successfully.' });
+  })
+  .catch(err => {
+    console.log('Error at /register-nodes-bulk');
   });
 });
 
@@ -224,6 +235,9 @@ app.get('/consensus', (req, res) => {
         note: 'Something went wrong.'
       });
     }
+  })
+  .catch(err => {
+    console.log(err);
   });
 });
 
@@ -282,6 +296,9 @@ rp(requestOptions)
   .then(data => {
     console.log('BLOCKCHAIN: ', data.note);
   });
+})
+.catch(err => {
+  console.log(err);
 });
 
 

@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./dev/networkNode.js",
+    "dev": "nodemon ./dev/networkNode.js",
     "node_1": "nodemon --watch dev -e js dev/networkNode.js 3001 http://localhost:3001",
     "node_2": "nodemon --watch dev -e js dev/networkNode.js 3002 http://localhost:3002",
     "node_3": "nodemon --watch dev -e js dev/networkNode.js 3003 http://localhost:3003",
@@ -19,6 +21,7 @@
     "js-sha256": "^0.9.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.2",
+    "ws": "^6.1.0"
   }
 }

@@ -2,19 +2,22 @@ const express = require('express');
 const bodyParser = require('body-Parser');
 const uuid = require('uuid/v1');
 const rp = require('request-promise');
-const port = process.argv[2] || 3000;
+const HTTP_PORT = process.env.HTTP_PORT || 3000;
 
 const Blockchain = require('./blockchain');
 const nodeAddress = uuid().split('-').join('');
 
 const playbucks = new Blockchain();
+const P2pServer = require('./p2p-server')
+const p2pServer = new P2pServer(playbucks);
 
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false}));
 
+
 app.get('/blockchain', (req, res) => {
-  res.send(playbucks)
+  res.send(playbucks);
 });
 
 
@@ -272,34 +275,34 @@ app.get('/address/:address', (req, res) => {
 
 
 
-// Auto register node at startup
-const currentNodeUrl = playbucks.currentNodeUrl;
-const requestOptions = {
-  uri: 'http://localhost:3001' + '/register-and-broadcast-node',
-  method: 'POST',
-  body: {newNodeUrl: currentNodeUrl},
-  json: true
-};
-
-rp(requestOptions)
-.then(data => {
-  console.log('NETWORK: ', data.note);
-
-  // then reach consensus
-  const requestOptions2 = {
-    uri: currentNodeUrl + '/consensus',
-    method: 'GET',
-    json: true
-  };
-
-  rp(requestOptions2)
-  .then(data => {
-    console.log('BLOCKCHAIN: ', data.note);
-  });
-})
-.catch(err => {
-  console.log(err);
-});
+// // Auto register node at startup
+// const currentNodeUrl = playbucks.currentNodeUrl;
+// const requestOptions = {
+//   uri: 'http://localhost:3001' + '/register-and-broadcast-node',
+//   method: 'POST',
+//   body: {newNodeUrl: currentNodeUrl},
+//   json: true
+// };
+//
+// rp(requestOptions)
+// .then(data => {
+//   console.log('NETWORK: ', data.note);
+//
+//   // then reach consensus
+//   const requestOptions2 = {
+//     uri: currentNodeUrl + '/consensus',
+//     method: 'GET',
+//     json: true
+//   };
+//
+//   rp(requestOptions2)
+//   .then(data => {
+//     console.log('BLOCKCHAIN: ', data.note);
+//   });
+// })
+// .catch(err => {
+//   console.log(err);
+// });
 
 
 app.get('/block-explorer', (req, res) => {
@@ -308,7 +311,7 @@ app.get('/block-explorer', (req, res) => {
 
 
 
-
-app.listen(port, () => {
-  console.log(`Listening on port ${port}...`);
+app.listen(HTTP_PORT, () => {
+  console.log(`Listening on port ${HTTP_PORT}...`);
 });
+p2pServer.listen();

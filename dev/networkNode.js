@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-Parser');
 const uuid = require('uuid/v1');
 const rp = require('request-promise');
-const HTTP_PORT = process.env.HTTP_PORT || 3000;
+const HTTP_PORT = process.env.HTTP_PORT || 3001;
 
 const Blockchain = require('./blockchain');
 const nodeAddress = uuid().split('-').join('');

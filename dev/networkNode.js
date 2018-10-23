@@ -1,5 +1,5 @@
 const express = require('express');
-const bodyParser = require('body-Parser');
+const bodyParser = require('body-parser');
 const uuid = require('uuid/v1');
 const rp = require('request-promise');
 const HTTP_PORT = process.env.HTTP_PORT || 3001;

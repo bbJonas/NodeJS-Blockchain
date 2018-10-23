@@ -1,7 +1,8 @@
 const Websocket = require('ws');
 
 const HTTP_PORT = process.env.HTTP_PORT || 3001; //for information purposes
-const P2P_PORT = process.env.P2P_PORT || 5001;
+const P2P_PORT = process.env.PORT || 5001
+// const P2P_PORT = process.env.P2P_PORT || 5001;
 const peers = process.env.PEERS ? process.env.PEERS.split(',') : [];
 
 class P2pServer {

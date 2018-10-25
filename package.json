@@ -7,6 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dev/networkNode.js",
     "dev": "nodemon dev/networkNode.js",
+    "p2pnode1": "set \"HTTP_PORT=3001\" && set \"P2P_PORT=5001\" && npm run dev",
+    "p2pnode2": "set \"HTTP_PORT=3002\" && set \"P2P_PORT=5002\" && set \"PEERS=ws://localhost:5001\" && npm run dev",
+    "p2pnode3": "set \"HTTP_PORT=3003\" && set \"P2P_PORT=5003\" && set \"PEERS=ws://localhost:5001,ws://localhost:5002\" && npm run dev",
     "node_1": "nodemon --watch dev -e js dev/networkNode.js 3001 http://localhost:3001",
     "node_2": "nodemon --watch dev -e js dev/networkNode.js 3002 http://localhost:3002",
     "node_3": "nodemon --watch dev -e js dev/networkNode.js 3003 http://localhost:3003",
@@ -24,6 +27,7 @@
     "js-sha256": "^0.9.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
+    "socket.io": "^2.1.1",
     "uuid": "^3.3.2",
     "ws": "^6.1.0"
   }

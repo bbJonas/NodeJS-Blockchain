@@ -1,0 +1,3 @@
+{
+  "peers": ["ws://localhost:5002", "ws://localhost:5003"]
+  }

@@ -1,5 +1,6 @@
 const sha256 = require('js-sha256');
-const currentNodeUrl = process.argv[3];
+const HTTP_PORT = process.env.HTTP_PORT || 3001;
+const currentNodeUrl = 'http://localhost:' + HTTP_PORT.trim();
 const uuid = require('uuid/v1');
 
 function Blockchain() {
@@ -7,7 +8,8 @@ function Blockchain() {
   this.pendingTransactions = [];
 
   this.currentNodeUrl = currentNodeUrl;
-  this.networkNodes = [];
+  this.networkNodes = ['http://localhost:3002'];
+  this.p2pServers = [];
 
   this.createNewBlock(100, '0', 'ThisIsTheGenesisBlockHash')
 };

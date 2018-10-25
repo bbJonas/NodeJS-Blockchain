@@ -101,6 +101,7 @@ app.get('/mine', (req, res) => {
       note: "New block mined & broadcast successfully.",
       block: newBlock
     });
+    p2pServer.syncChains();
   })
   .catch(err => {
     console.log(err);
@@ -303,6 +304,7 @@ app.get('/address/:address', (req, res) => {
 // .catch(err => {
 //   console.log(err);
 // });
+
 
 
 app.get('/block-explorer', (req, res) => {
